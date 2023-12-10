@@ -54,16 +54,28 @@ void setup() {
 }
 
 void loop() {
+    key();
     int switchValue = digitalRead(switchPin); //定义变量并赋初值为0     
-    if (switchValue == LOW) { // 如果检测到按键按下
-        delay(1000);
+    /*if (switchValue == LOW) { // 如果检测到按键按下
+        delay(50);
         KeyNum ++; 
         delay(200); // 执行模式 +1
         words_display();  
           if (KeyNum >= 7) { // 如果超过设定执行状态数量，那么就回到 1 号模式
               KeyNum = 0;
               }
-      }
+      }*/
+  if (digitalRead(switchPin) == LOW) { // 如果检测到按键按下
+    while (digitalRead(switchPin) == LOW) {
+      // 按键一直按下时，持续计数
+      KeyNum ++;
+          Serial.println(KeyNum);
+      words_display(); 
+      delay(500); // 防止过快计数，可以根据需要调整
+      if (KeyNum >= 7) { // 如果超过设定执行状态数量，那么就回到 1 号模式
+      KeyNum = 0;
+    }
+}
 
     switch(KeyNum){
     case 0:
@@ -98,7 +110,7 @@ void loop() {
                 Serial.print("Mission 1 Complete");
                 Serial.println();
                 digitalWrite(redLedPin, LOW);
-                Misson_display();    
+                Misson_display();KeyNum = 0;delay(500);    
             break;
     case 2:Serial.println("Mission 2 Start");//反向SPX
             digitalWrite(redLedPin, HIGH);  //点亮红色LED
@@ -127,7 +139,7 @@ void loop() {
                 Serial.print("Mission 2 Complete");
                 Serial.println();
                 digitalWrite(redLedPin, LOW);
-                Misson_display();
+                Misson_display();KeyNum = 0;
             break;  
     case 3:Serial.println("Mission 3 Start");//正向PDT
                      digitalWrite(redLedPin, HIGH);  //点亮红色LED
@@ -157,7 +169,7 @@ void loop() {
                 Serial.print("Mission 3 Complete");
                 Serial.println();
                 digitalWrite(redLedPin, LOW);
-                Misson_display();
+                Misson_display();KeyNum = 0;delay(500);
             break;
     case 4:Serial.println("Mission 4 Start");//反向PDT
             digitalWrite(redLedPin, HIGH);  //点亮红色LED
@@ -186,7 +198,7 @@ void loop() {
                 Serial.print("Mission 4 Complete");
                 Serial.println();
                 digitalWrite(redLedPin, LOW);
-                Misson_display();
+                Misson_display();KeyNum = 0;delay(500);
             break;
       /*  case 5:Serial.println("Mission 5 Start");//正向PDT
             digitalWrite(redLedPin, HIGH);  //点亮红色LED
@@ -255,6 +267,7 @@ void loop() {
             Serial.println();KeyNum = 0;
             break;
     }
+}
 }
 
 void pinSelect(int pinnum)
